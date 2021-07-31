@@ -356,7 +356,9 @@ $ sudo ip route
 default via 10.0.2.2 dev enp0s3 proto dhcp metric 100
 10.0.2.0/24 dev enp0s3 proto kernel scope link src 10.0.2.15 metric 100
 172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
-**172.20.0.0/16 dev br0 proto kernel scope link src 172.20.0.10**
+<span style="color:blue">
+172.20.0.0/16 dev br0 proto kernel scope link src 172.20.0.10**
+</span>
 192.168.56.0/24 dev enp0s8 proto kernel scope link src 192.168.56.21 metric 101
 
 ```
