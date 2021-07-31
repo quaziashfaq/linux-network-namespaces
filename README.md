@@ -47,6 +47,7 @@ Now we are in the netns1 namespace with sh shell. Check interface in the netns1
 # ip a
 ```
 Now we are able to see ceth1 in the list along with loopback interface(lo). Both link state is down.
+
 **Configuring Interface IP in Network Namespaces**
 ```
 $ sudo ip netns exec netns1 ip addr add 172.20.0.11/16 dev ceth1
@@ -105,7 +106,7 @@ $ sudo ip netns exec netns1 ip addr
        valid_lft forever preferred_lft forever
 
 ```
-**Now from `netns`, namespace we check the ping results**
+**Now from `netns` namespace, we check the ping results**
 ```
 $ sudo ip netns exec netns1 ip route
 172.20.0.0/16 dev ceth1 proto kernel scope link src 172.20.0.11
@@ -298,6 +299,7 @@ default via 10.0.2.2 dev enp0s3 proto dhcp metric 100
 
 ```
 I am trying to ping from `netns2` to the `veth2` IP. Ping is failing. We see from tcpdump output, `veth2` is getting ICMP echo reqeust from `ceth2` but since global namespace (owner of `veth2`) does not know what's the MAC address of `ceth2`, it's broadcasting MAC address query packet but the packets are going through `veth1`. It's happening because, the current route table is saying that packets to 172.20.0.0/16 should go through veth1. Since the 1st rule matches, the 2nd rule is not matched.
+
 **NO NEED TO READ TILL THE ABOVE LINES**
 
 
