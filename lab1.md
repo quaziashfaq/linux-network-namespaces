@@ -480,7 +480,7 @@ PING 192.168.56.1 (192.168.56.1) 56(84) bytes of data.
 rtt min/avg/max/mdev = 0.248/0.256/0.264/0.008 ms
 ```
 
-Here I am monitoring `netns1` interface `ceth1`. The echo reply from 192.168.56.1 is coming through the interface `veth1`.
+Here I am monitoring `netns1`'s interface `ceth1`. The echo reply from 192.168.56.1 is coming through the interface `veth1`.
 ```
 root@debian:~# ip netns exec netns1 tcpdump -ennvvq -i ceth1 -l | tee
 tcpdump: listening on ceth1, link-type EN10MB (Ethernet), capture size 262144 bytes
@@ -520,7 +520,7 @@ tcpdump: listening on veth1, link-type EN10MB (Ethernet), capture size 262144 by
 21:03:17.171026 42:15:05:91:3e:98 > 62:70:b6:31:37:04, ARP, length 42: Ethernet (len 6), IPv4 (len 4), Reply 172.20.0.11 is-at 42:15:05:91:3e:98, length 28
 ```
 
-The ICMP packets are seen exchangin between `enp0s8` and `vboxnet0`
+The ICMP packets are seen exchaning between `enp0s8` and `vboxnet0`
 ```
 root@debian:~# tcpdump -ennvvq -i enp0s8 \(arp or icmp\) -l | tee
 tcpdump: listening on enp0s8, link-type EN10MB (Ethernet), capture size 262144 bytes
