@@ -386,7 +386,9 @@ There are 5 tables. Each table got a number of CHAIN of rules. I need to read mo
 - security
 
 Shortly, at first, we need to add some rule that will forward my packet to/through enp0s8.
+Check the current status:
 
+```
 root@debian:~# iptables -t nat -L -v
 Chain PREROUTING (policy ACCEPT 0 packets, 0 bytes)
  pkts bytes target     prot opt in     out     source               destination
@@ -396,10 +398,11 @@ Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
 
 Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
  pkts bytes target     prot opt in     out     source               destination
-    3   252 MASQUERADE  all  --  any    any     172.20.0.0/16        anywhere
 
 Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
  pkts bytes target     prot opt in     out     source               destination
+```
+
 
 
 **Set us up to have responses from the network.**
@@ -424,13 +427,14 @@ Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
 
 Chain POSTROUTING (policy ACCEPT 0 packets, 0 bytes)
  pkts bytes target     prot opt in     out     source               destination
+    3   252 MASQUERADE  all  --  any    any     172.20.0.0/16        anywhere
 
 Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
  pkts bytes target     prot opt in     out     source               destination
 ```
 
 
-By default, the IPv4 policy in Linux kernel disables support for IP forwarding, which prevents boxes running Red Hat Enterprise Linux from functioning as dedicated edge routers. 
+By default, the IPv4 policy in Linux kernel disables support for IP forwarding, which prevents boxes running Linux from functioning as routers. 
 
 To check the current value, run the following command:
 ```
@@ -486,13 +490,11 @@ root@debian:~# ip netns exec netns1 tcpdump -ennvvq -i ceth1 -l | tee
 tcpdump: listening on ceth1, link-type EN10MB (Ethernet), capture size 262144 bytes
 21:03:11.956640 42:15:05:91:3e:98 > 62:70:b6:31:37:04, IPv4, length 98: (tos 0x0, ttl 64, id 44249, offset 0, flags [DF], proto ICMP (1), length 84)
     172.20.0.11 > 192.168.56.1: ICMP echo request, id 4791, seq 1, length 64
-21:03:11.956876 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3779, offset 0, flags [none], proto ICMP
-(1), length 84)
+21:03:11.956876 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3779, offset 0, flags [none], proto ICMP (1), length 84)
     192.168.56.1 > 172.20.0.11: ICMP echo reply, id 4791, seq 1, length 64
 21:03:12.979069 42:15:05:91:3e:98 > 62:70:b6:31:37:04, IPv4, length 98: (tos 0x0, ttl 64, id 44262, offset 0, flags [DF], proto ICMP (1), length 84)
     172.20.0.11 > 192.168.56.1: ICMP echo request, id 4791, seq 2, length 64
-21:03:12.979315 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3825, offset 0, flags [none], proto ICMP
-(1), length 84)
+21:03:12.979315 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3825, offset 0, flags [none], proto ICMP (1), length 84)
     192.168.56.1 > 172.20.0.11: ICMP echo reply, id 4791, seq 2, length 64
 21:03:17.170812 42:15:05:91:3e:98 > 62:70:b6:31:37:04, ARP, length 42: Ethernet (len 6), IPv4 (len 4), Request who-has 172.20.0.1 tell 172.20.0.11, length 28
 21:03:17.170991 62:70:b6:31:37:04 > 42:15:05:91:3e:98, ARP, length 42: Ethernet (len 6), IPv4 (len 4), Request who-has 172.20.0.11 tell 172.20.0.1, length 28
@@ -506,13 +508,11 @@ root@debian:~# tcpdump -ennvvq -i veth1
 tcpdump: listening on veth1, link-type EN10MB (Ethernet), capture size 262144 bytes
 21:03:11.956642 42:15:05:91:3e:98 > 62:70:b6:31:37:04, IPv4, length 98: (tos 0x0, ttl 64, id 44249, offset 0, flags [DF], proto ICMP (1), length 84)
     172.20.0.11 > 192.168.56.1: ICMP echo request, id 4791, seq 1, length 64
-21:03:11.956873 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3779, offset 0, flags [none], proto ICMP
-(1), length 84)
+21:03:11.956873 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3779, offset 0, flags [none], proto ICMP (1), length 84)
     192.168.56.1 > 172.20.0.11: ICMP echo reply, id 4791, seq 1, length 64
 21:03:12.979073 42:15:05:91:3e:98 > 62:70:b6:31:37:04, IPv4, length 98: (tos 0x0, ttl 64, id 44262, offset 0, flags [DF], proto ICMP (1), length 84)
     172.20.0.11 > 192.168.56.1: ICMP echo request, id 4791, seq 2, length 64
-21:03:12.979311 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3825, offset 0, flags [none], proto ICMP
-(1), length 84)
+21:03:12.979311 62:70:b6:31:37:04 > 42:15:05:91:3e:98, IPv4, length 98: (tos 0x0, ttl 63, id 3825, offset 0, flags [none], proto ICMP (1), length 84)
     192.168.56.1 > 172.20.0.11: ICMP echo reply, id 4791, seq 2, length 64
 21:03:17.170782 62:70:b6:31:37:04 > 42:15:05:91:3e:98, ARP, length 42: Ethernet (len 6), IPv4 (len 4), Request who-has 172.20.0.11 tell 172.20.0.1, length 28
 21:03:17.171011 42:15:05:91:3e:98 > 62:70:b6:31:37:04, ARP, length 42: Ethernet (len 6), IPv4 (len 4), Request who-has 172.20.0.1 tell 172.20.0.11, length 28
@@ -526,13 +526,11 @@ root@debian:~# tcpdump -ennvvq -i enp0s8 \(arp or icmp\) -l | tee
 tcpdump: listening on enp0s8, link-type EN10MB (Ethernet), capture size 262144 bytes
 21:03:11.956662 08:00:27:3c:31:79 > 0a:00:27:00:00:00, IPv4, length 98: (tos 0x0, ttl 63, id 44249, offset 0, flags [DF], proto ICMP (1), length 84)
     192.168.56.11 > 192.168.56.1: ICMP echo request, id 4791, seq 1, length 64
-21:03:11.956862 0a:00:27:00:00:00 > 08:00:27:3c:31:79, IPv4, length 98: (tos 0x0, ttl 64, id 3779, offset 0, flags [none], proto ICMP
-(1), length 84)
+21:03:11.956862 0a:00:27:00:00:00 > 08:00:27:3c:31:79, IPv4, length 98: (tos 0x0, ttl 64, id 3779, offset 0, flags [none], proto ICMP (1), length 84)
     192.168.56.1 > 192.168.56.11: ICMP echo reply, id 4791, seq 1, length 64
 21:03:12.979097 08:00:27:3c:31:79 > 0a:00:27:00:00:00, IPv4, length 98: (tos 0x0, ttl 63, id 44262, offset 0, flags [DF], proto ICMP (1), length 84)
     192.168.56.11 > 192.168.56.1: ICMP echo request, id 4791, seq 2, length 64
-21:03:12.979299 0a:00:27:00:00:00 > 08:00:27:3c:31:79, IPv4, length 98: (tos 0x0, ttl 64, id 3825, offset 0, flags [none], proto ICMP
-(1), length 84)
+21:03:12.979299 0a:00:27:00:00:00 > 08:00:27:3c:31:79, IPv4, length 98: (tos 0x0, ttl 64, id 3825, offset 0, flags [none], proto ICMP (1), length 84)
     192.168.56.1 > 192.168.56.11: ICMP echo reply, id 4791, seq 2, length 64
 ^C4 packets captured
 4 packets received by filter
@@ -564,5 +562,4 @@ tcpdump: listening on vboxnet0, link-type EN10MB (Ethernet), snapshot length 262
     192.168.56.11 > 192.168.56.1: ICMP echo request, id 4795, seq 2, length 64
 0a:00:27:00:00:00 > 08:00:27:3c:31:79, IPv4, length 98: (tos 0x0, ttl 64, id 35307, offset 0, flags [none], proto ICMP (1), length 84)
     192.168.56.1 > 192.168.56.11: ICMP echo reply, id 4795, seq 2, length 64
-
 ```
